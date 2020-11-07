@@ -1,0 +1,9 @@
+Flask
+Werkzeug
+sqlite3
+click
+Flask-WTF
+Flask-Login
+wtforms-components
+colour
+flaskr
