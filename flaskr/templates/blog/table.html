@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}{{page}}{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('blog.add', page='Profile') }}">Add</a>
+  {% endif %}
+{% endblock %}
+{% block content %}
+<table border = 1 width="100%" cellspacing="0">
+  <thead>
+    <tr>
+      {% for x in list %}
+      <th>{{x}}</th>
+      {% endfor %}
+  </thead>
+  <tfoot>
+    <tr>
+      {% for x in list %}
+      <th>{{x}}</th>
+      {% endfor %}
+    </tr>
+  </tfoot>
+  <tbody>
+    {% for row in rows %}               <!--These are variables that get loaded by the database-->
+        <tr>
+          {% for x in list %}
+          {% if x == "Image" %}
+              <td><img width=200px src="../{{row["Image"]}}" ></td>
+          {% elif x == "Add Variant" %}
+            <td><a class="action" href="{{url_for('blog.addVariant', id=row['id'])}}">Add Variant</td>
+          {% elif x == "Delete Product" %}
+            <td>
+              <form action="{{ url_for('blog.delete', id=row['id'], page=page) }}" method="post">
+                <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+              </form>
+          {% elif x == "Visit Page" %}
+              <td><a class="action" href="{{url_for('blog.profile', id=row['id'], name=row['name'])}}">Visit</td>
+          {% else %}
+              <td>{{row[x]}}</td>
+          {% endif %}
+          {% endfor %}
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

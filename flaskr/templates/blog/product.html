@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}{{product['Name']}}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ product['Name'] }}</h1>
+        </div>
+      </header>
+      <p><img src="../{{ product['Image'] }}" alt="" /></p>
+      <p class="body">{{ product['Description'] }}</p>
+    </article>
+
+    <form method="POST" action="{{url}}" enctype="multipart/form-data">
+      {{ form.csrf_token }}
+      {{ form.hidden_tag() }}
+      {% for field in form if field.widget.input_type != 'hidden' %}
+        {% if field.type == "FileField" %}
+            <td></td>
+            <td>{{ field }}</td>
+        {% else %}
+          <label for="{{field.id}}">{{field.id}}</label>
+          {{ field(placeholder=field.id, class="form-control") }}
+        {% endif %}
+      {% endfor %}
+      <input type="submit" name="Submit" value="Add to Cart">
+    </form>
+    {% for row in rows %}
+    <article class="post">
+      <header>
+        <div>
+          <p><img src="../{{ row['Image'] }}" alt="" /></p>
+        </div>
+      </header>
+      <p class="body">{{ row['Name'] }}</p>
+    </article>
+
+    {% endfor %}
+
+{% endblock %}

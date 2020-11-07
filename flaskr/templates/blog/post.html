@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Posts{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('blog.add', page='Post') }}">New</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ post['title'] }}</h1>
+          <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
+        </div>
+        {% if g.user['id'] == post['author_id'] %}
+          <a class="action" href="{{ url_for('blog.update', id=post['id'], page='Post') }}">Edit</a>
+        {% endif %}
+      </header>
+      <p><img src="../{{ post['file'] }}" alt="" /></p>
+      <p class="body">{{ post['body'] }}</p>
+    </article>
+
+    <form method="POST" action="{{url}}" enctype="multipart/form-data">
+      {{ form.csrf_token }}
+      {{ form.hidden_tag() }}
+      {% for field in form if field.widget.input_type != 'hidden' %}
+        {% if field.type == "FileField" %}
+            <td></td>
+            <td>{{ field }}</td>
+        {% else %}
+          <label for="{{field.id}}">{{field.id}}</label>
+          {{ field(placeholder=field.id, class="form-control") }}
+        {% endif %}
+      {% endfor %}
+      <input type="submit" name="Submit">
+    </form>
+    {% for row in comments %}
+    <article class="post">
+      <header>
+        <div>
+          <div class="about">by {{ row['username'] }} on {{ row['created'].strftime('%Y-%m-%d') }}</div>
+        </div>
+      </header>
+      <p class="body">{{ row['body'] }}</p>
+    </article>
+
+    {% endfor %}
+
+{% endblock %}

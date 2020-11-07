@@ -1,0 +1,92 @@
+-- Initialize the database.
+-- Drop any existing data and create empty tables.
+
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS Post;
+DROP TABLE IF EXISTS Comment;
+DROP TABLE IF EXISTS Message;
+DROP TABLE IF EXISTS Product;
+DROP TABLE IF EXISTS variant;
+DROP TABLE IF EXISTS Profile;
+
+
+CREATE TABLE user (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
+);
+
+CREATE TABLE Post (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  author_id INTEGER NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  title TEXT NOT NULL,
+  body TEXT NOT NULL,
+  file TEXT NOT NULL,
+  FOREIGN KEY (author_id) REFERENCES user (id)
+);
+
+CREATE TABLE Comment (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  author_id INTEGER NOT NULL,
+  post_id INTEGER NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  body TEXT NOT NULL,
+  FOREIGN KEY (author_id) REFERENCES user (id),
+  FOREIGN KEY (post_id) REFERENCES Post (id)
+);
+
+CREATE TABLE Message (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  author_id INTEGER NOT NULL,
+  receiver_id INTEGER NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  body TEXT NOT NULL,
+  file TEXT NOT NULL,
+  FOREIGN KEY (author_id) REFERENCES user (id)
+);
+
+CREATE TABLE Product (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  author_id INTEGER NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Name TEXT NOT NULL,
+  Description TEXT NOT NULL,
+  Price FLOAT NOT NULL,
+  Image TEXT NOT NULL,
+  FOREIGN KEY (author_id) REFERENCES user (id)
+);
+
+CREATE TABLE variant (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  product_id INTEGER NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Name TEXT NOT NULL,
+  Image TEXT NOT NULL,
+  FOREIGN KEY (product_id) REFERENCES Product (id)
+);
+
+CREATE TABLE Profile (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  author_id INTEGER NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Name TEXT NOT NULL,
+  Email TEXT NOT NULL,
+  Phone TEXT NOT NULL,
+  Location TEXT NOT NULL,
+  Instagram TEXT NOT NULL,
+  Twitter TEXT NOT NULL,
+  Facebook TEXT NOT NULL,
+  Youtube TEXT NOT NULL,
+  Soundcloud TEXT NOT NULL,
+  Spotify TEXT NOT NULL,
+  AppleMusic TEXT NOT NULL,
+  Biography TEXT NOT NULL,
+  Image TEXT NOT NULL,
+  Image2 TEXT NOT NULL,
+  menu_color TEXT NOT NULL,
+  background_color TEXT NOT NULL,
+  main_text_color TEXT NOT NULL,
+  secondary_text_color TEXT NOT NULL,
+  FOREIGN KEY (author_id) REFERENCES user (id)
+);

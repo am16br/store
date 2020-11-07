@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit {{ page }}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+    {{ form.hidden_tag() }}
+    {% for field in form if field.widget.input_type != 'hidden' %}
+        {% if field.type == "FileField" %}
+            <td><img src="../../{{ post[loop.index] }}"></td>
+            <td>{{ field }}</td>
+        {% else %}
+          <label for="{{field.id}}">{{field.id}}</label>
+          {{ field(placeholder=post[loop.index], class="form-control") }}
+        {% endif %}
+    {% endfor %}
+    <input type="submit" name="Submit">
+  </form>
+  <hr>
+  <form action="{{ url_for('blog.delete', id=post['id'], page=page) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}
