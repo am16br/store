@@ -185,7 +185,7 @@ def add(page):
             db = get_db()
             db.execute(string,(t),)
             db.commit()
-            return render_template("blog/add.html", form=form, page=page, mark=mark)
+            return redirect(url_for("blog.add",page=page))
     return render_template("blog/add.html", form=form, page=page, mark=mark)
 
 @bp.route("/sendMessage/<int:id>", methods=("GET", "POST"))
@@ -355,14 +355,14 @@ def product(id):
         list.append(row['Name'])
     form.Option.choices=list
     if request.method == "POST":
-
+        quantity = form.Quantity.data
         error = None
         if error is not None:
             flash(error)
         else:
             db.execute(
-                "INSERT INTO cart (product_id, cookie) VALUES (?, ?)",
-                (id, str(request.cookies),),
+                "INSERT INTO cart (product_id, Quantity, cookie) VALUES (?, ?, ?)",
+                (id, quantity, str(request.cookies),),
             )
             db.commit()
         return redirect(url_for("blog.cart"))
@@ -374,7 +374,7 @@ def cart():
     form = CheckoutForm()
     list = get_table("Cart")
     db = get_db()
-    rows = db.execute("SELECT c.id, p.Name, p.Image, c.created, p.Price"
+    rows = db.execute("SELECT c.id, c.Quantity, p.Name, p.Image, c.created, p.Price"
     " FROM cart c JOIN product p ON c.product_id = p.id"
     " WHERE c.cookie = ?",(str(request.cookies),)).fetchall()
     if form.validate_on_submit():
@@ -446,10 +446,10 @@ def deletemessage(id):
     else:
         flag=db.execute('SELECT receiver_id FROM message WHERE id = ?', (id,)).fetchone()[0]
         if(flag == -1):
-            dab.execute('DELETE FROM message WHERE id =?', (id,))
+            db.execute('DELETE FROM message WHERE id =?', (id,))
         else:
             db.execute('UPDATE message SET sender_id = ? WHERE id =?', (-1, id,))
-    dab.commit()
+    db.commit()
     return redirect(url_for('blog.inbox'))
 
 @bp.route('/message/<int:id>', methods = ['POST', 'GET'])

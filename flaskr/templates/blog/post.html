@@ -26,6 +26,7 @@
       <audio controls>
         <source src="{{ url_for('static', filename=post['file']) }}" type="audio/mpeg">
       </audio>
+      <a href="{{ url_for('static', filename=post['file']) }}" download>Download</a>
       {% else %}
         <p><img src="{{ url_for('static', filename=post['file']) }}" alt="" /></p>
       {% endif %}

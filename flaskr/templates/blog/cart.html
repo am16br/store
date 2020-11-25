@@ -23,8 +23,8 @@
     </tr>
   </tfoot>
   <tbody>
-    {% set ns = namespace (subtotal = 0) %}
-    {% set shipping = 5 %}
+    {% set ns = namespace (subtotal = 0, shipping = 0) %}
+
     {% for row in rows %}               <!--These are variables that get loaded by the database-->
         <tr>
           {% for x in list %}
@@ -37,6 +37,7 @@
               </form>
           {% else %}
               <td>{{row[x]}}</td>
+              {% set ns.shipping = 5 %}
           {% endif %}
           {% endfor %}
           {% set ns.subtotal = ns.subtotal + row['Price'] %}
@@ -47,8 +48,8 @@
 <div>
 
 <p> Subtotal: ${{ ns.subtotal }} </p>
-<p> Shipping: ${{ shipping }} </p>
-<p> Total: ${{ shipping + ns.subtotal }} </p>
+<p> Shipping: ${{ ns.shipping }} </p>
+<p> Total: ${{ ns.shipping + ns.subtotal }} </p>
 </div>
 <h2>PLACE ORDER</h2>
 {% endblock %}
