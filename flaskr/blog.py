@@ -185,7 +185,7 @@ def add(page):
             db = get_db()
             db.execute(string,(t),)
             db.commit()
-            return render_template("blog/add.html", form=form, page=page, mark=mark)
+            return redirect(url_for("blog.add",page=page))
     return render_template("blog/add.html", form=form, page=page, mark=mark)
 
 @bp.route("/sendMessage/<int:id>", methods=("GET", "POST"))
