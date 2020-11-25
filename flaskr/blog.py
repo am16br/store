@@ -446,10 +446,10 @@ def deletemessage(id):
     else:
         flag=db.execute('SELECT receiver_id FROM message WHERE id = ?', (id,)).fetchone()[0]
         if(flag == -1):
-            dab.execute('DELETE FROM message WHERE id =?', (id,))
+            db.execute('DELETE FROM message WHERE id =?', (id,))
         else:
             db.execute('UPDATE message SET sender_id = ? WHERE id =?', (-1, id,))
-    dab.commit()
+    db.commit()
     return redirect(url_for('blog.inbox'))
 
 @bp.route('/message/<int:id>', methods = ['POST', 'GET'])
