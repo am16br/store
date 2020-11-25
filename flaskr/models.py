@@ -15,7 +15,7 @@ def MakeTable(list, table, where):
         content = content + "<tr>"
         for x in list:
             if(x == "Image"):
-                content = content + "<td><img width=200px src='../"+row["Image"]+"' ></td>"
+                content = content + "<td><img width=200px src='"+url_for('static', filename=row['image']) +"' ></td>"
             elif(x == "Add Variant"):
                 content = content + "<td><a class='action' href='"+url_for('blog.addVariant', id=row['id'])+"'>Add Variant</td>"
             elif(x == "Delete"):
@@ -49,7 +49,7 @@ def carousel(rows,title):
         url=url_for('blog.product',id=row['id'])
         string=string+"""<div class="product">
         <a href='"""+url+"""' class="item">
-          <img alt="Embedded Image" width=200; height=200; object-fit:scale-down; src='../"""+row['Image']+"""' class="center"/>
+          <img alt="Embedded Image" width=200; height=200; object-fit:scale-down; src='"""+url_for('static', filename=row['image']) +"""' class="center"/>
           <div class="item-info">
             <h3 style="text-align:center">"""+row['Name']+"""</h3>
             <h5 class="price" style="text-align:center">$"""+p+"""</h5>
@@ -79,7 +79,7 @@ def carousel2(rows,title):
         url=url_for('blog.post',id=row['id'])
         str=str+"""<div class="product">
           <a href='"""+url+"""' class="item">
-            <img alt="Embedded Image" width=200; height=200; object-fit:scale-down; src='../"""+row['file']+"""'"/>
+            <img alt="Embedded Image" width=200; height=200; object-fit:scale-down; src='"""+url_for('static', filename=row['file']) +"""'/>
             <div class="item-info">
               <h3>"""+row['title']+"""</h3>
             </div>

@@ -11,7 +11,7 @@
           <h1>{{ product['Name'] }}</h1>
         </div>
       </header>
-      <p><img src="../{{ product['Image'] }}" alt="" /></p>
+      <p><img src="{{ url_for('static', filename=product['Image']) }}"  alt="" /></p>
       <p class="body">{{ product['Description'] }}</p>
     </article>
 
@@ -33,7 +33,7 @@
     <article class="post">
       <header>
         <div>
-          <p><img src="../{{ row['Image'] }}" alt="" /></p>
+          <p><img src="{{ url_for('static', filename=row['Image']) }}"  alt="" /></p>
         </div>
       </header>
       <p class="body">{{ row['Name'] }}</p>

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}{{page}}{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Quid Bro Quo</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="{{ url_for('static', filename='css/all.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <div class="container">
+        <div class="row">
+        	<!-- BEGIN INBOX -->
+        	<div class="col-md-12">
+        		<div class="grid email">
+        			<div class="grid-body">
+        				<div class="row">
+        					<!-- BEGIN INBOX MENU -->
+        					<div class="col-md-3">
+        						<h2 class="grid-title"><i class="fa fa-inbox"></i> Inbox</h2>
+        						<hr>
+
+        						<div>
+        							<ul class="navbar-nav ml-auto">
+        								<li class="header">Folders</li>
+        								<li class="active"><a href="{{url_for('blog.inbox')}}"><i class="fa fa-inbox"></i> Inbox ({{inboxcount}})</a></li>
+        								<li><a href="{{url_for('blog.sent')}}"><i class="fa fa-inbox"></i> Sent ({{sentcount}})</a></li>
+        							</ul>
+        						</div>
+        					</div>
+        					<!-- END INBOX MENU -->
+
+                  <!-- BEGIN INBOX CONTENT -->
+                  <div class="col-md-9">
+                    <div class="row">
+                    </div>
+                    <div class="padding"></div>
+                    <div class="table-responsive">
+                      <div><br><br></div>
+                      <h3> From: @{{ user }} </h3>
+                      <h3> Subject: {{ subject }} </h3>
+                      <div><br><br></div>
+                      <p> {{ message }} </p>
+                      <div><br></div>
+                      <a class="btn btn-block btn-primary" href="{{url_for('blog.sendMessage', id=sender)}}"><i class="fa fa-pencil"></i>&nbsp;&nbsp;NEW MESSAGE</a>
+                    </div>
+                  </div>
+                  <!-- END INBOX CONTENT -->
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        	<!-- END INBOX -->
+        </div>
+        </div>
+      </div>
+      <!-- End of Main Content -->
+{% endblock %}

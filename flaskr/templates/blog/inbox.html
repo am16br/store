@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}{{page}}{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Quid Bro Quo</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="{{ url_for('static', filename='css/all.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <div class="container">
+        <div class="row">
+        	<!-- BEGIN INBOX -->
+        	<div class="col-md-12">
+        		<div class="grid email">
+        			<div class="grid-body">
+        				<div class="row">
+        					<!-- BEGIN INBOX MENU -->
+        					<div class="col-md-3">
+        						<h2 class="grid-title"><i class="fa fa-inbox"></i> Inbox</h2>
+        						<hr>
+
+        						<div>
+        							<ul class="navbar-nav ml-auto">
+        								<li class="header">Folders</li>
+        								<li class="active"><a href="{{url_for('blog.inbox')}}"><i class="fa fa-inbox"></i> Inbox ({{inboxcount}})</a></li>
+        								<li><a href="{{url_for('blog.sent')}}"><i class="fa fa-inbox"></i> Sent ({{sentcount}})</a></li>
+        							</ul>
+        						</div>
+        					</div>
+        					<!-- END INBOX MENU -->
+
+        					<!-- BEGIN INBOX CONTENT -->
+        					<div class="col-md-9">
+        						<div class="row">
+        							<div class="col-sm-6">
+        								<label style="margin-right: 8px;" class="">
+        									<div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" id="check-all" class="icheck" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+        								</label>
+        							</div>
+
+        							<div class="col-md-6 search-form">
+        								<form action="#" class="text-right">
+        									<div class="input-group">
+        										<input type="text" class="form-control input-sm" placeholder="Search">
+        										<span class="input-group-btn">
+                                <button type="submit" name="search" class="btn_ btn-primary btn-sm search"><i class="fa fa-search"></i></button></span>
+        									</div>
+        								</form>
+        							</div>
+        						</div>
+
+        						<div class="padding"></div>
+
+        						<div class="table-responsive">
+        							<table class="table">
+        								<tbody>
+                          {% for row in rows %}
+                          <tr>
+                            <td></td>
+          									<td> <a href="{{url_for('blog.deletemessage', id=row["id"])}}"><i class="fas fa-trash"></i> </a></td>
+          									<td class="name"><a href="{{url_for('blog.message', id=row['id'])}}">{{row["username"]}}</a></td>
+          									<td class="subject"><a href="{{url_for('blog.message', id=row['id'])}}">{{row["subject"]}}</a></td>
+          									<td class="time">{{row["created"]}}</td>
+                          </tr>
+                          {% endfor %}
+        							</tbody>
+                    </table>
+        						</div>
+        					</div>
+        					<!-- END INBOX CONTENT -->
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        	<!-- END INBOX -->
+        </div>
+        </div>
+      </div>
+      <!-- End of Main Content -->
+{% endblock %}

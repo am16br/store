@@ -1,3 +1,4 @@
+#python3 -m venv venv
 #. venv/bin/activate
 #export FLASK_APP=flaskr
 #export FLASK_ENV=development
@@ -105,8 +106,8 @@ def get_add_page(page):
         mark = Markup(MakeTable(["Visit Page", "Name", "Email", "Biography", "Image"], "Profile", ""))
     elif(page == "Message"):
         form = MessageForm()
-        string = "author_id, receiver_id, body, file"
-        values = "?, ?, ?, ?"
+        string = "sender_id, receiver_id, subject, message, file"
+        values = "?, ?, ?, ?, ?"
         mark = ""
     return form, string, values, mark
 
@@ -132,6 +133,8 @@ def get_table(page):
         list = ["Visit Page", "Name", "Email", "Biography", "Image"]
     elif(page == "Message"):
         list = ["author_id", "body", "file", "created"]
+    elif(page == "Cart"):
+        list = ["Name", "Quantity", "Price", "Image", "Delete Product",]
     return list
 
 @bp.route("/post/<int:id>", methods=("GET", "POST"))
@@ -164,7 +167,7 @@ def add(page):
                     filename = secure_filename(field.data.filename)
                     file_path=os.path.join("flaskr/static/images", filename)
                     field.data.save(file_path)
-                    t =  t + ("static/images/"+filename,)
+                    t =  t + ("images/"+filename,)
                 else:
                     t = t + ("",)
             elif (field.type == "ColorField"):
@@ -182,9 +185,42 @@ def add(page):
             db = get_db()
             db.execute(string,(t),)
             db.commit()
-            return redirect(url_for("blog.index"))
+            return render_template("blog/add.html", form=form, page=page, mark=mark)
     return render_template("blog/add.html", form=form, page=page, mark=mark)
 
+@bp.route("/sendMessage/<int:id>", methods=("GET", "POST"))
+@login_required
+def sendMessage(id):
+    """Create a new post for the current user."""
+    form, fields, values, mark = get_add_page('Message')
+    if form.validate_on_submit():
+        t=()
+        t=(g.user['id'], id,)
+        for field in form:
+            if(field.type == "FileField"):
+                if(field.data):
+                    filename = secure_filename(field.data.filename)
+                    file_path=os.path.join("flaskr/static/images", filename)
+                    field.data.save(file_path)
+                    t =  t + ("images/"+filename,)
+                else:
+                    t = t + ("",)
+            elif (field.type == "ColorField"):
+                t =  t + (str(field.data),)
+            elif (field.type == "DecimalField"):
+                t =  t + (float(field.data),)
+            elif (field.type == "StringField" or field.type == "TextAreaField"):
+                t =  t + (field.data,)
+        error = None
+        if error is not None:
+            flash(error)
+        else:
+            string = "INSERT INTO Message ("+fields+") VALUES ("+values+")"
+            db = get_db()
+            db.execute(string,(t),)
+            db.commit()
+            return redirect(url_for("blog.inbox"))
+    return render_template("blog/add.html", form=form, page="Message", mark=mark)
 
 @bp.route("/<int:id>/update/<path:page>", methods=("GET", "POST"))
 @login_required
@@ -200,7 +236,7 @@ def update(id, page):
                     filename = secure_filename(field.data.filename)
                     file_path=os.path.join("flaskr/static/images", filename)
                     field.data.save(file_path)
-                    t =  t + ("static/images/"+filename,)
+                    t =  t + ("images/"+filename,)
                 else:
                     t = t + ("",)
             elif (field.type == "ColorField"):
@@ -253,7 +289,7 @@ def addVariant(id):
                     filename = secure_filename(field.data.filename)
                     file_path=os.path.join("flaskr/static/images", filename)
                     field.data.save(file_path)
-                    t =  t + ("static/images/"+filename,)
+                    t =  t + ("images/"+filename,)
                 else:
                     t = t + ("",)
             elif (field.type == "ColorField"):
@@ -272,13 +308,19 @@ def addVariant(id):
                 (t),
             )
             db.commit()
-        return render_template("blog/add.html", form=form, page=name, mark=Markup(MakeTable(list,'variant', where)))
+            return redirect(url_for('blog.index'))
     return render_template("blog/add.html", form=form, page=name, mark=Markup(MakeTable(list,'variant', where)))
 
 @bp.route("/table/<path:page>", methods=("GET", "POST"))
 def table(page):
-    list = get_table(page)
-    string = "SELECT * FROM " + page
+
+    if(page == "order"):
+        list = ["Name", "Address", "Product", "Quantity", "Price"]
+        string = "SELECT * FROM " + page
+        #string = "SELECT o.id, p.Name, ca.Quantity, cu.Name, cu.Address FROM order o JOIN product p ON o.product_id = p.product_id JOIN cart ca ON "
+    else:
+        list = get_table(page)
+        string = "SELECT * FROM " + page
     db = get_db()
     rows = db.execute(string).fetchall()
     return render_template("blog/table.html", list=list, rows=rows, page=page)
@@ -312,4 +354,119 @@ def product(id):
     for row in rows:
         list.append(row['Name'])
     form.Option.choices=list
+    if request.method == "POST":
+
+        error = None
+        if error is not None:
+            flash(error)
+        else:
+            db.execute(
+                "INSERT INTO cart (product_id, cookie) VALUES (?, ?)",
+                (id, str(request.cookies),),
+            )
+            db.commit()
+        return redirect(url_for("blog.cart"))
     return render_template("blog/product.html", product=product, rows=rows, form=form)
+
+@bp.route("/cart", methods=("GET", "POST"))
+def cart():
+    print(request.cookies)
+    form = CheckoutForm()
+    list = get_table("Cart")
+    db = get_db()
+    rows = db.execute("SELECT c.id, p.Name, p.Image, c.created, p.Price"
+    " FROM cart c JOIN product p ON c.product_id = p.id"
+    " WHERE c.cookie = ?",(str(request.cookies),)).fetchall()
+    if form.validate_on_submit():
+        name = form.Name.data
+        address = form.Address.data
+        error = None
+        if error is not None:
+            flash(error)
+        else:
+            db.execute(
+                "INSERT INTO customer (Name, Address, cart_id) VALUES (?, ?, ?)",
+                (name, address, str(request.cookies),),
+            )
+            db.commit()
+        return redirect(url_for("blog.orders"))
+    return render_template("blog/cart.html", form=form, list=list, rows = rows)
+
+@bp.route("/deletecart/<int:id>", methods=("GET", "POST"))
+def deletecart(id):
+    db = get_db()
+    db.execute("DELETE FROM cart WHERE id = ?",(id,))
+    db.commit()
+    return redirect(url_for("blog.cart"))
+
+@bp.route("/orders", methods=("GET", "POST"))
+@login_required
+def orders(id):
+    if(g.user_id['username'] == 'admin'):
+        db = get_db()
+        rows = db.execute("SELECT * FROM customer").fetchall();
+        return redirect(url_for("blog.table"))
+    return redirect(url_for("blog.index"))
+
+@bp.route('/inbox', methods = ['POST', 'GET'])
+@login_required
+def inbox():
+    db = get_db()
+    sentcount = db.execute('SELECT count(*) FROM message WHERE sender_id = ?', (g.user['id'],)).fetchone()[0]
+    inboxcount=db.execute('SELECT count(*) FROM message WHERE receiver_id = ?', (g.user['id'],)).fetchone()[0]
+    rows = db.execute('SELECT m.id, m.subject, m.created, u.username '
+            'FROM message m JOIN user u ON m.sender_id = u.id '
+            'WHERE receiver_id = ? ORDER BY created DESC ', (g.user['id'],)).fetchall()
+    return render_template("blog/inbox.html",
+        inboxcount=inboxcount, sentcount=sentcount, rows=rows)
+
+@bp.route('/sent', methods = ['POST', 'GET'])
+@login_required
+def sent():
+    db = get_db()
+    sentcount = db.execute('SELECT count(*) FROM message WHERE sender_id = ?', (g.user['id'],)).fetchone()[0]
+    inboxcount=db.execute('SELECT count(*) FROM message WHERE receiver_id = ?', (g.user['id'],)).fetchone()[0]
+    rows = db.execute('SELECT m.id, m.subject, m.created, u.username '
+            'FROM message m JOIN user u ON m.sender_id = u.id '
+            'WHERE sender_id = ? ORDER BY created DESC ', (g.user['id'],)).fetchall()
+    return render_template("blog/inbox.html",
+        inboxcount=inboxcount, sentcount=sentcount, rows=rows)
+
+@bp.route('/deletemessage/<int:id>')
+@login_required
+def deletemessage(id):
+    db = get_db()
+    flag=db.execute('SELECT receiver_id FROM message WHERE id = ?', (id,)).fetchone()[0]
+    if(flag == g.user['id']):
+        flag=db.execute('SELECT sender_id FROM message WHERE id = ?', (id,)).fetchone()[0]
+        if(flag == -1):
+            db.execute('DELETE FROM message WHERE id =?', (id,))
+        else:
+            db.execute('UPDATE message SET receiver_id = ? WHERE id =?', (-1, id,))
+    else:
+        flag=db.execute('SELECT receiver_id FROM message WHERE id = ?', (id,)).fetchone()[0]
+        if(flag == -1):
+            dab.execute('DELETE FROM message WHERE id =?', (id,))
+        else:
+            db.execute('UPDATE message SET sender_id = ? WHERE id =?', (-1, id,))
+    dab.commit()
+    return redirect(url_for('blog.inbox'))
+
+@bp.route('/message/<int:id>', methods = ['POST', 'GET'])
+@login_required
+def message(id):
+    db = get_db()
+    sentcount = db.execute('SELECT count(*) FROM message WHERE sender_id = ?', (g.user['id'],)).fetchone()[0]
+    inboxcount=db.execute('SELECT count(*) FROM message WHERE receiver_id = ?', (g.user['id'],)).fetchone()[0]
+    sender = db.execute('SELECT sender_id FROM message WHERE id = ?', (id,)).fetchone()[0]
+    user = db.execute('SELECT username FROM user WHERE id = ?', (sender,)).fetchone()[0]
+    subject = db.execute('SELECT subject FROM message WHERE id = ?', (id,)).fetchone()[0]
+    message = db.execute('SELECT message FROM message WHERE id = ?', (id,)).fetchone()[0]
+    return render_template("blog/message.html", inboxcount=inboxcount, sentcount=sentcount,
+        user=user,subject=subject,message=message, sender=sender)
+
+
+@bp.route("/contenteditable", methods=("GET", "POST"))
+def contenteditable():
+
+    return render_template("blog/contenteditable.html")

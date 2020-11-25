@@ -1,36 +1,34 @@
 {% extends 'base.html' %}
 {% block title %}{{post['Name']}}{% endblock %}
 {% block header %}
-  <h1></h1>
-  {% if g.user['id'] == post['author_id'] %}
-    <a class="action" href="{{ url_for('blog.update', id=post['id'], page='Profile') }}">Edit</a>
-  {% elif g.user['id'] and g.user['id'] != post['author_id'] %}
-    <h3><a href="{{ url_for('blog.add', page='Message') }}">Send Message</a><h3>
-  {% endif %}
+<h1></h1>
+{% if g.user['id'] == post['author_id'] %}
+  <a class="action" href="{{ url_for('blog.update', id=post['id'], page='Profile') }}">Edit</a>
+{% elif g.user['id'] and g.user['id'] != post['author_id'] %}
+  <h3><a href="{{ url_for('blog.sendMessage', id=post['author_id']) }}">Send Message</a><h3>
+{% endif %}
 
 {% endblock %}
 
 {% block content %}
-  <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="../static/css/styles.css" rel="stylesheet" />
-
-        <link rel="stylesheet" href="../static/css/owl.carousel.min.css">
-        <link rel="stylesheet" href="../static/css/aos.css">
-
-    </head>
-      <body id="page-top">
-      <!-- Navigation-->
-      <style>
+<html lang="en">
+  <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+      <meta name="description" content="" />
+      <meta name="author" content="" />
+      <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+      <!-- Google fonts-->
+      <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+      <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+      <!-- Core theme CSS (includes Bootstrap)-->
+      <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/aos.css') }}">
+  </head>
+  <body id="page-top">
+    <!-- Navigation-->
+    <style>
         nav{
           background-color:{{post['menu_color']}};
         }
@@ -44,11 +42,11 @@
           color:{{post['secondary_text_color']}};
         }
         div {text-align:center}
-      </style>
+    </style>
       <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="sideNav" style=>
           <a class="navbar-brand js-scroll-trigger" href="#page-top">
               <span class="d-block d-lg-none">{{ post['Name'] }}</span>
-              <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="../{{ post['Image'] }}" alt="" /></span>
+              <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{{ url_for('static', filename=post['Image']) }}" alt="" /></span>
           </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -84,7 +82,7 @@
                         {% endif %}
                     </div>
                     <p class="lead mb-5">{{ post['Biography'] }}</p>
-                    <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" src="../{{ post['Image2'] }}" alt="" /></span>
+                    <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" src="{{ url_for('static', filename=post['Image2']) }}" alt="" /></span>
 
                 </div>
             </section>
@@ -123,7 +121,7 @@
             </div>
             </section>
             {% if g.user['id'] == post['author_id'] %}
-            &emsp;<a href="{{ url_for('blog.add', id=post['id'], page='Profile') }}">Add Media</a>
+            &emsp;<a href="{{ url_for('blog.add', id=post['id'], page='Post') }}">Add Media</a>
             {% endif %}
             {% if media %}
             <hr class="m-0" />
@@ -150,17 +148,16 @@
         <!-- Third party plugin JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
         <!-- Core theme JS-->
-        <script src="../static/js/scripts.js"></script>
+        <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
-        <script src="../static/js/jquery-3.3.1.min.js"></script>
-        <script src="../static/js/jquery-ui.js"></script>
-        <script src="../static/js/popper.min.js"></script>
-        <script src="../static/js/bootstrap.min.js"></script>
-        <script src="../static/js/owl.carousel.min.js"></script>
-        <script src="../static/js/jquery.magnific-popup.min.js"></script>
-        <script src="../static/js/aos.js"></script>
-        <script src="../static/js/main.js"></script>
-
+        <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/aos.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     </body>
-    </html>
+</html>
 {% endblock %}

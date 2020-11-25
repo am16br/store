@@ -18,6 +18,7 @@ class CommentForm(FlaskForm):
     comment = TextAreaField(id='Comment', validators=[InputRequired('Text Required')])
 
 class MessageForm(FlaskForm):
+    name = StringField(id='Subject', validators=[InputRequired()])
     comment = TextAreaField(id='Comment', validators=[InputRequired('Text Required')])
     file = FileField(id='File', validators=[FileRequired()])
 
@@ -62,8 +63,9 @@ class OrderForm(FlaskForm):
     Size = RadioField('Size', choices=["Small", "Medium", "Large"])
     Option = RadioField('Option', choices=[])
 
-
-
+class CheckoutForm(FlaskForm):
+    Name = StringField(id='Name', validators=[InputRequired()])
+    Address = TextAreaField(id='Address', validators=[InputRequired()])
 
 
 class ServicesForm(FlaskForm):

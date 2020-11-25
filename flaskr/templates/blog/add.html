@@ -2,6 +2,9 @@
 
 {% block header %}
   <h1>{% block title %}Add {{ page }}{% endblock %}</h1>
+  {% if page == 'Product' %}
+    <a class="action" href="{{ url_for('blog.contenteditable') }}">Design Studio</a>
+  {% endif %}
 {% endblock %}
 
 {% block content %}

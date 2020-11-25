@@ -1,32 +1,32 @@
 html {
   font-family: sans-serif;
-  background: #eee;
+  background: black;
   padding: 1rem;
 }
 
 body {
   max-width: 960px;
   margin: 0 auto;
-  background: lightgray;
+  background: black;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: serif;
-  color: #377ba8;
+  color: blue;
   margin: 1rem 0;
 }
 
-a {
-  color: #377ba8;
+a td label {
+  color: blue;
 }
 
 hr {
   border: none;
-  border-top: 1px solid lightgray;
+  border-top: 1px solid white;
 }
 
 nav {
-  background: lightgray;
+  background: white;
   display: flex;
   align-items: center;
   padding: 0 0.5rem;
@@ -92,11 +92,12 @@ nav ul li a, nav ul li span, header .action {
 }
 
 .post .about {
-  color: slategray;
+  color: white;
   font-style: italic;
 }
 
 .post .body {
+  color: white;
   white-space: pre-line;
 }
 
