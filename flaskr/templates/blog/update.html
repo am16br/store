@@ -10,7 +10,7 @@
     {{ form.hidden_tag() }}
     {% for field in form if field.widget.input_type != 'hidden' %}
         {% if field.type == "FileField" %}
-            <td><img src="../../{{ post[loop.index] }}"></td>
+            <td><img width=150px src="{{ url_for('static', filename=post['file']) }}"></td>
             <td>{{ field }}</td>
         {% else %}
           <label for="{{field.id}}">{{field.id}}</label>

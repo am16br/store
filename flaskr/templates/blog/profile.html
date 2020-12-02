@@ -70,6 +70,29 @@
                     <h1 class="mb-0">
                         <span>{{ post['Name'] }}</span>
                     </h1>
+                    <div class="social-icons">
+                      {% if post['Instagram'] %}
+                          <h3><a href="https://www.instagram.com/{{ post['Instagram'] }}"><i class="fab fa-instagram"></i>@{{ post['Instagram'] }}</a></h3>
+                      {% endif %}
+                      {% if post['Twitter'] %}
+                          <h3><a href="https://twitter.com/{{ post['Twitter'] }}"><i class="fab fa-twitter""></i>@{{ post['Twitter'] }}</a></h3>
+                      {% endif %}
+                      {% if post['Facebook'] %}
+                          <a class="social-icon" href="{{ post['Facebook'] }}"><i class="fab fa-facebook-f"></i></a>
+                      {% endif %}
+                      {% if post['Youtube'] %}
+                          <a class="social-icon" href="{{ post['Youtube'] }}"><i class="fab fa-youtube"></i></a>
+                      {% endif %}
+                      {% if post['Soundcloud'] %}
+                          <a class="social-icon" href="{{ post['Soundcloud'] }}"><i class="fab fa-soundcloud"></i></a>
+                      {% endif %}
+                      {% if post['Spotify'] %}
+                          <a class="social-icon" href="{{ post['Spotify'] }}"><i class="fab fa-spotify"></i></a>
+                      {% endif %}
+                      {% if post['AppleMusic'] %}
+                          <a class="social-icon" href="{{ post['AppleMusic'] }}"><i class="fab fa-apple"></i></a>
+                      {% endif %}
+                </div>
                     <div class="subheading mb-5">
                         {% if post['Location'] %}
                           {{ post['Location'] }} ·
@@ -82,8 +105,7 @@
                         {% endif %}
                     </div>
                     <p class="lead mb-5">{{ post['Biography'] }}</p>
-                    <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" src="{{ url_for('static', filename=post['Image2']) }}" alt="" /></span>
-
+                    <span><img class="img-fluid"src="{{ url_for('static', filename=post['Image2']) }}" alt="" /></span>
                 </div>
             </section>
             <hr class="m-0" />
@@ -95,10 +117,10 @@
                         <div class="flex-grow-1">
                             <div class="social-icons">
                               {% if post['Instagram'] %}
-                                  <h2><a href="https://www.instagram.com/{{ post['Instagram'] }}"><i class="fab fa-instagram"></i>@{{ post['Instagram'] }}</a></h2>
+                                  <h3><a href="https://www.instagram.com/{{ post['Instagram'] }}"><i class="fab fa-instagram"></i>@{{ post['Instagram'] }}</a></h3>
                               {% endif %}
                               {% if post['Twitter'] %}
-                                  <h2><a href="https://twitter.com/{{ post['Twitter'] }}"><i class="fab fa-twitter""></i>@{{ post['Twitter'] }}</a></h2>
+                                  <h3><a href="https://twitter.com/{{ post['Twitter'] }}"><i class="fab fa-twitter""></i>@{{ post['Twitter'] }}</a></h3>
                               {% endif %}
                               {% if post['Facebook'] %}
                                   <a class="social-icon" href="{{ post['Facebook'] }}"><i class="fab fa-facebook-f"></i></a>

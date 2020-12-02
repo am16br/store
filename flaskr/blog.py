@@ -368,6 +368,12 @@ def product(id):
         return redirect(url_for("blog.cart"))
     return render_template("blog/product.html", product=product, rows=rows, form=form)
 
+@bp.route("/artists", methods=("GET", "POST"))
+def artists():
+    db = get_db()
+    rows = db.execute("SELECT * FROM Profile").fetchall()
+    return render_template("blog/artists.html", rows = rows)
+
 @bp.route("/cart", methods=("GET", "POST"))
 def cart():
     print(request.cookies)

@@ -12,7 +12,7 @@ class LoginForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField(id='Title', validators=[InputRequired('Title Required')])
     body = TextAreaField(id='Body', validators=[InputRequired('Body Required')])
-    file = FileField(id='Photo', validators=[FileRequired()])
+    file = FileField(id='Photo')
 
 class CommentForm(FlaskForm):
     comment = TextAreaField(id='Comment', validators=[InputRequired('Text Required')])
@@ -20,7 +20,7 @@ class CommentForm(FlaskForm):
 class MessageForm(FlaskForm):
     name = StringField(id='Subject', validators=[InputRequired()])
     comment = TextAreaField(id='Comment', validators=[InputRequired('Text Required')])
-    file = FileField(id='File', validators=[FileRequired()])
+    file = FileField(id='File')
 
 class ProductForm(FlaskForm):
     name = StringField(id='Name', validators=[InputRequired()])
@@ -50,7 +50,7 @@ class ProfileForm(FlaskForm):
     soundcloud = StringField(id='Soundcloud Link')
     spotify = StringField(id='Spotify Link')
     apple = StringField(id='Apple Music Link')
-    bio = TextAreaField(id='Biography', validators=[InputRequired()])
+    bio = TextAreaField(id='Biography')
     image = FileField(id='Primary Image', validators=[FileRequired()])
     image2 = FileField(id='Secondary Image or Video')
     menu_color = ColorField(id='Menu Color')

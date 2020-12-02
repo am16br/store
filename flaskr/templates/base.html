@@ -4,7 +4,7 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
-  <h1><a href="{{ url_for('index') }}">Dumblit</a></h1>
+  <h1><a href="https://www.dumblitinc.com">Dumblit</a></h1>
   <ul>
     {% if g.user['username'] == 'admin' %}
       <li><span>{{ g.user['username'] }}</span>
@@ -22,13 +22,11 @@
       <li><a href="{{ url_for('blog.cart') }}">Cart</a>
       <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
     {% else %}
-      <li><a href="{{ url_for('blog.table', page='Profile' ) }}">Artists</a>
-      <li><a href="{{ url_for('blog.table', page='Product') }}">Products</a>
-      <li><a href="{{ url_for('blog.table', page='Product') }}">TV</a>
-      <li><a href="{{ url_for('blog.table', page='Product') }}">Studio</a>
-      <li><a href="{{ url_for('blog.cart') }}">Cart</a>
-      <li><a href="{{ url_for('auth.register') }}">Register</a>
-      <li><a href="{{ url_for('auth.login') }}">Log In</a>
+      <li><a href="https://www.dumblitinc.com/shop">Shop</a>
+      <li><a href="https://www.dumblitinc.com/music">Records</a>
+      <li><a href="https://www.dumblitinc.com/tv">Media</a>
+      <li><a href="{{ url_for('blog.artists') }}">Artists</a>
+      <li><a href="https://www.dumblitinc.com/contact">Contact</a>
     {% endif %}
   </ul>
 </nav>
