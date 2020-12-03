@@ -48,7 +48,7 @@ def carousel(rows,title):
         #url=url_for('shopsingle',prod=row['Name'])
         url=url_for('blog.product',id=row['id'])
         string=string+"""<div class="product">
-        <a href='"""+url+"""' class="item">
+        <a href='"""+row['Description']+"""' class="item">
           <img alt="Embedded Image" width=200; height=200; object-fit:scale-down; src='"""+url_for('static', filename=row['image']) +"""' class="center"/>
           <div class="item-info">
             <h3 style="text-align:center">"""+row['Name']+"""</h3>

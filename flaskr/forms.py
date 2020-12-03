@@ -25,7 +25,7 @@ class MessageForm(FlaskForm):
 class ProductForm(FlaskForm):
     name = StringField(id='Name', validators=[InputRequired()])
     price = DecimalField(id='Price', validators=[InputRequired()])
-    description = TextAreaField(id='Description', validators=[InputRequired()])
+    description = StringField(id='Description', validators=[InputRequired()])
     photo = FileField(id='Photo', validators=[FileRequired()])
 
 class VariantForm(FlaskForm):
