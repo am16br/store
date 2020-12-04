@@ -10,8 +10,8 @@ class LoginForm(FlaskForm):
     password = PasswordField(id='Password', validators=[InputRequired()])
 
 class PostForm(FlaskForm):
-    title = StringField(id='Title', validators=[InputRequired('Title Required')])
-    body = TextAreaField(id='Body', validators=[InputRequired('Body Required')])
+    title = StringField(id='Title')
+    body = TextAreaField(id='Body')
     file = FileField(id='Photo')
 
 class CommentForm(FlaskForm):

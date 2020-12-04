@@ -330,16 +330,16 @@ def profile(id, name):
     """Show all the posts, most recent first."""
     db = get_db()
     post = (db.execute("SELECT * FROM Profile WHERE id = ?",(id,),).fetchone())
-    products = (db.execute("SELECT * FROM Product WHERE author_id = ?",(post['author_id'],),).fetchall())
+    products = (db.execute("SELECT * FROM Product WHERE author_id = ?",(1,),).fetchall())
     if(products == []):
         products=""
     else:
         products=Markup(carousel(products, "Products"))
     media = (db.execute("SELECT * FROM Post WHERE author_id = ?",(post['author_id'],),).fetchall())
-    if(media == []):
-        media=""
-    else:
-        media=Markup(carousel2(media, "Media"))
+    #if(media == []):
+        #media=""
+    #else:
+        #media=Markup(carousel2(media, "Media"))
     return render_template("blog/profile.html", post=post, products=products, media=media)
 
 @bp.route("/product/<int:id>", methods=("GET", "POST"))

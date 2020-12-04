@@ -1,17 +1,5 @@
-{% extends 'base.html' %}
-{% block title %}{{post['Name']}}{% endblock %}
-{% block header %}
-<h1></h1>
-{% if g.user['id'] == post['author_id'] %}
-  <a class="action" href="{{ url_for('blog.update', id=post['id'], page='Profile') }}">Edit</a>
-{% elif g.user['id'] and g.user['id'] != post['author_id'] %}
-  <h3><a href="{{ url_for('blog.sendMessage', id=post['author_id']) }}">Send Message</a><h3>
-{% endif %}
-
-{% endblock %}
-
-{% block content %}
 <html lang="en">
+<title>{{post['Name']}}</title>
   <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -59,6 +47,7 @@
               {% if products %}
               <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#products">Products</a></li>
               {% endif %}
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('blog.artists') }}">Artists</a>
             </ul>
           </div>
       </nav>
@@ -149,20 +138,56 @@
             <hr class="m-0" />
             <section class="resume-section" id="media">
               <div class="resume-section-content">
-                {{media}}
+                {% for row in media %}
+                  {% if ("Filmography" in row['title']) %}
+                    <h1>{{row['title']}}</h1>
+                  {% elif ("Discography" in row['title']) %}
+                    <h1>{{row['title']}}</h1>
+                  {% else %}
+                    <h3>{{row['title']}}</h3>
+
+                  {% endif %}
+                  {% if (".mp4" in row['file']) %}
+                    <video width="320" height="240" controls>
+                      <source src="{{ url_for('static', filename=row['file']) }}" type="video/mp4">
+                    </video>
+                  {% elif (".mp3" in row['file']) %}
+                  <audio controls>
+                    <source src="{{ url_for('static', filename=row['file']) }}" type="audio/mpeg">
+                  </audio>
+                  <a href="{{ url_for('static', filename=row['file']) }}" download>Download</a>
+                  {% elif row['file'] == "" %}
+
+                  {% else %}
+                    <p><img class="img-fluid" src="{{ url_for('static', filename=row['file']) }}" alt="" /></p>
+                  {% endif %}
+                  {% if ("<iframe" in row['body']) %}
+                    {{ post['body']|safe }}
+                  {% elif ("http" in row['body']) %}
+                  <a href="{{ row['body'] }}" class="btn btn-primary btn-icon-split">
+                    <span class="icon text-white-50">
+                    </span>
+                    <span class="text">See More</span>
+                  </a>
+                  {% else %}
+                    <p class="body">{{ row['body'] }}</p>
+                  {% endif %}
+                {% endfor %}
              </div>
             </section>
             {% endif %}
-            {% if g.user['id'] == post['author_id'] %}
+            {% if g.user['id'] == 1 %}
             &emsp;<a href="{{ url_for('blog.add', id=post['id'], page='Product') }}">Add Product</a>
             {% endif %}
-            {% if products %}
-            <hr class="m-0" />
-            <section class="resume-section" id="products">
-              <div class="resume-section-content">
-                {{ products }}
-              </div>
-            </section>
+            {% if post['Name'] == "Paddy Dubz" or  post['Name'] == "rob kowalskii" or post['Name'] == "Jennylee Aerts" %}
+              {% if products %}
+              <hr class="m-0" />
+              <section class="resume-section" id="products">
+                <div class="resume-section-content">
+                  {{ products }}
+                </div>
+              </section>
+             {% endif %}
            {% endif %}
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -182,4 +207,3 @@
         <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     </body>
 </html>
-{% endblock %}
