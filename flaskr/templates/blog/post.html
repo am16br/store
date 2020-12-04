@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Posts{% endblock %}</h1>
+  <h1>{% block title %}{% endblock %}</h1>
   {% if g.user %}
     <a class="action" href="{{ url_for('blog.add', page='Post') }}">New</a>
   {% endif %}
@@ -58,7 +58,7 @@
       {% elif post['file'] == "" %}
 
       {% else %}
-        <p><img src="{{ url_for('static', filename=post['file']) }}" alt="" /></p>
+        <p><img class="img-fluid" src="{{ url_for('static', filename=post['file']) }}" alt="" /></p>
       {% endif %}
       {% if ("<iframe" in post['body']) %}
         {{ post['body']|safe }}
