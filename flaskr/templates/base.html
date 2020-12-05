@@ -17,7 +17,7 @@
     {% elif g.user %}
       <li><span>{{ g.user['username'] }}</span>
       <li><a href="{{ url_for('blog.add', page='Profile') }}">Add Profile</a>
-      <li><a href="{{ url_for('blog.add', page='Product') }}">Add Product</a>
+      <li><a href="{{ url_for('blog.add', page='Post') }}">Add Media</a>
       <li><a href="{{ url_for('blog.inbox') }}">Messages</a>
       <li><a href="{{ url_for('blog.cart') }}">Cart</a>
       <li><a href="{{ url_for('auth.logout') }}">Log Out</a>

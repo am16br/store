@@ -20,7 +20,7 @@
         nav{
           background-color:{{post['menu_color']}};
         }
-        body, header, html{
+        body, header, html, footer{
           background-color:{{post['background_color']}};
         }
         h1{
@@ -39,15 +39,28 @@
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
-              <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
-              <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#links">Links</a></li>
-              {% if media %}
-              <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#media">Media</a></li>
-              {% endif %}
-              {% if products %}
-              <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#products">Products</a></li>
-              {% endif %}
-              <li class="nav-item"><a class="nav-link" href="{{ url_for('blog.artists') }}">Artists</a>
+              {% if post['Name'] == "Paddy Dubz" or  post['Name'] == "rob kowalskii" or post['Name'] == "MISS DUBZ" or post['Name'] == "GREGG CHRISTOPHER" %}
+                <li class="nav-item"><a class="nav-link" style="text-color:black" href="https://www.dumblitinc.com/shop">Dumblit</a>
+                <li class="nav-item"><a class="nav-link" href="https://www.dumblitinc.com/music">Records</a>
+                <li class="nav-item"><a class="nav-link" href="https://www.dumblitinc.com/tv">TV</a>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('blog.artists') }}">Artists</a>
+                <li class="nav-item"><a class="nav-link" href="https://www.dumblitinc.com/contact">Contact</a>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                {% if media %}
+                  <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#media">Media</a></li>
+                {% endif %}
+                {% if products %}
+                  <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#products">Products</a></li>
+                {% endif %}
+
+              {% else %}
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                {% if media %}
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#media">Media</a></li>
+                {% endif %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('blog.artists') }}">Artists</a>
+             {% endif %}
+
             </ul>
           </div>
       </nav>
@@ -59,6 +72,9 @@
                     <h1 class="mb-0">
                         <span>{{ post['Name'] }}</span>
                     </h1>
+                    {% if g.user['id'] == post['author_id'] %}
+                      <a class="action" href="{{ url_for('blog.update', id=post['id'], page='Profile') }}">Edit</a>
+                    {% endif %}
                     <div class="social-icons">
                       {% if post['Instagram'] %}
                           <h3><a href="https://www.instagram.com/{{ post['Instagram'] }}"><i class="fab fa-instagram"></i>@{{ post['Instagram'] }}</a></h3>
@@ -98,39 +114,6 @@
                 </div>
             </section>
             <hr class="m-0" />
-            <!-- Experience-->
-            <section class="resume-section" id="links">
-                <div class="resume-section-content">
-                    <h1 class="mb-5">Links</h1>
-                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                        <div class="flex-grow-1">
-                            <div class="social-icons">
-                              {% if post['Instagram'] %}
-                                  <h3><a href="https://www.instagram.com/{{ post['Instagram'] }}"><i class="fab fa-instagram"></i>@{{ post['Instagram'] }}</a></h3>
-                              {% endif %}
-                              {% if post['Twitter'] %}
-                                  <h3><a href="https://twitter.com/{{ post['Twitter'] }}"><i class="fab fa-twitter""></i>@{{ post['Twitter'] }}</a></h3>
-                              {% endif %}
-                              {% if post['Facebook'] %}
-                                  <a class="social-icon" href="{{ post['Facebook'] }}"><i class="fab fa-facebook-f"></i></a>
-                              {% endif %}
-                              {% if post['Youtube'] %}
-                                  <a class="social-icon" href="{{ post['Youtube'] }}"><i class="fab fa-youtube"></i></a>
-                              {% endif %}
-                              {% if post['Soundcloud'] %}
-                                  <a class="social-icon" href="{{ post['Soundcloud'] }}"><i class="fab fa-soundcloud"></i></a>
-                              {% endif %}
-                              {% if post['Spotify'] %}
-                                  <a class="social-icon" href="{{ post['Spotify'] }}"><i class="fab fa-spotify"></i></a>
-                              {% endif %}
-                              {% if post['AppleMusic'] %}
-                                  <a class="social-icon" href="{{ post['AppleMusic'] }}"><i class="fab fa-apple"></i></a>
-                              {% endif %}
-                        </div>
-                      </div>
-                </div>
-            </div>
-            </section>
             {% if g.user['id'] == post['author_id'] %}
             &emsp;<a href="{{ url_for('blog.add', id=post['id'], page='Post') }}">Add Media</a>
             {% endif %}
@@ -162,7 +145,7 @@
                     <p><img class="img-fluid" src="{{ url_for('static', filename=row['file']) }}" alt="" /></p>
                   {% endif %}
                   {% if ("<iframe" in row['body']) %}
-                    {{ post['body']|safe }}
+                    {{ row['body']|safe }}
                   {% elif ("http" in row['body']) %}
                   <a href="{{ row['body'] }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
@@ -179,7 +162,7 @@
             {% if g.user['id'] == 1 %}
             &emsp;<a href="{{ url_for('blog.add', id=post['id'], page='Product') }}">Add Product</a>
             {% endif %}
-            {% if post['Name'] == "Paddy Dubz" or  post['Name'] == "rob kowalskii" or post['Name'] == "Jennylee Aerts" %}
+            {% if post['Name'] == "Paddy Dubz" or  post['Name'] == "rob kowalskii" or post['Name'] == "MISS DUBZ" or post['Name'] == "GREGG CHRISTOPHER" %}
               {% if products %}
               <hr class="m-0" />
               <section class="resume-section" id="products">
@@ -189,6 +172,16 @@
               </section>
              {% endif %}
            {% endif %}
+           <footer class="sticky-footer">
+             <div class="container my-auto">
+               <div class="copyright text-center my-auto">
+                 <div>
+                 <span>Copyright &copy; AI-dan Solutions 2020</span>
+                 </div>
+                 <span>Contact ai.dan.solution@gmail.com to make/edit/remove profile</span>
+               </div>
+             </div>
+           </footer>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>

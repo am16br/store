@@ -79,7 +79,7 @@ def carousel2(rows,title):
         url=url_for('blog.post',id=row['id'])
         str=str+"""<div class="product">
           <a href='"""+url+"""' class="item">
-            <img alt="Embedded Image" width=200; height=200; object-fit:scale-down; src='"""+url_for('static', filename=row['file']) +"""'/>
+            <img alt="" class="img-fluid" src='"""+url_for('static', filename=row['file']) +"""'/>
             <div class="item-info">
               <h3>"""+row['title']+"""</h3>
             </div>
